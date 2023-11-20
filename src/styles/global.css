@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "Glamour";
+    src: url("../GlamourAbsolute_Regular.otf");
+}
+
+@font-face {
+    font-family: "ApercuPro";
+    font-weight: 400;
+    src: url("../ApercuPro-Regular.ttf");
+    src: url("../ApercuPro-Regular.woff");
+    src: url("../ApercuPro-Regular.woff2");
+}
+@font-face {
+    font-family: "ApercuPro";
+    font-weight: 700;
+    src: url("../ApercuPro-Bold.ttf");
+    src: url("../ApercuPro-Bold.woff");
+    src: url("../ApercuPro-Bold.woff2");
+}
+
+h1 {
+    @apply font-glamour text-4xl;
+}
+
+p {
+    @apply font-apercu;
+}
+
+.card-dark {
+    @apply bg-slate-900 p-8 flex flex-col gap-6;
+}
+
+.card-outline {
+    @apply border-2 border-slate-700 p-8;
+}
+
+a {
+    @apply underline underline-offset-4 transition-all ease-in-out;
+}
+
+article {
+    @apply flex flex-col gap-4 card-outline;
+}

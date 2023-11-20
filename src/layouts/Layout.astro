@@ -1,0 +1,82 @@
+---
+import "../styles/global.css";
+
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+
+const today = new Date();
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="Astro description" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+    </head>
+    <body class="bg-slate-950 text-slate-200 font-apercu">
+        <div class="w-full h-3 bg-pink-500"></div>
+        <div class="w-full h-3 bg-violet-700"></div>
+        <div class="w-full h-3 bg-blue-900"></div>
+        <div class="max-w-6xl p-4 md:p-8 mx-auto flex md:gap-8">
+            <div class="flex flex-col gap-8 w-full items-center">
+                <main class="max-w-md flex flex-col gap-8 justify-center">
+                    <slot />
+                </main>
+                <footer
+                    class="flex flex-col justify-center text-center gap-8 max-w-lg border-t-2 border-slate-700 pt-8"
+                >
+                    <!-- <div
+                        class="flex flex-col md:flex-row items-center gap-8 justify-center"
+                    >
+                        <a href="https://hotlinewebring.club/charlie/previous"
+                            >← Prev</a
+                        >
+                        <div class="text-[#fa9aba]">
+                            <p>Proud member of the</p>
+                            <a
+                                href="https://hotlinewebring.club/"
+                                target="_blank"
+                                class="underline anchor whitespace-nowrap"
+                                >Hotline Webring ↗</a
+                            >
+                        </div>
+                        <a href="https://hotlinewebring.club/charlie/next"
+                            >Next →</a
+                        >
+                    </div> -->
+                    <div class="text-slate-400">
+                        &copy; {today.getFullYear()} Charlie Coppinger. All
+                        rights reserved.
+                    </div>
+                    <p>Made with 💖 from Aotearoa 🥝</p>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>

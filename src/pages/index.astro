@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+
+import Updates from "../components/Updates.astro";
+import Layout from "../layouts/Layout.astro";
+
+const allPosts = await Astro.glob("../content/updates/*.md");
+
+const posts = allPosts.map((b) => ({
+    title: b.frontmatter.title,
+    Content: b.Content,
+    date: b.frontmatter.date,
+}));
+---
+
+<Layout title="TheCoppinger">
+    <div class="card-dark">
+        <h1>Updates</h1>
+        <p>
+            The latest happenings from <a
+                href="https://twitch.tv/thecoppinger"
+                target="_blank">the stream.</a
+            >
+        </p>
+    </div>
+    {
+        posts.map(({ Content, date }) => {
+            return (
+                <article>
+                    <Content />
+                    <p class="text-slate-400 font-glamour">{date}</p>
+                </article>
+            );
+        })
+    }
+</Layout>

@@ -1,0 +1,10 @@
+---
+// Import necessary functions from Astro
+
+// Get a list of markdown files from the /page directory
+const markdownFiles = await Astro.glob('../pages/*.md');
+---
+
+<div>
+  <pre>{JSON.stringify(markdownFiles, null, 2)}</pre>
+</div>
