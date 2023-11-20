@@ -1,0 +1,10 @@
+---
+twitter: "rhyswebber01"
+date: 1700478000000
+---
+
+Rhys reached out to me on Twitter after I posted about Design Mentor for the first time.
+
+He mentioned that he'd create a Figma file a few years ago that was a small experiment on the kind of content I'm planning for Design Mentor, and the experiment went well.
+
+This kind of stuff is great to knowm, and the file itself is an excellent reference. Thanks Rhys 🫡

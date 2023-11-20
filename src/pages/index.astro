@@ -1,16 +1,54 @@
 ---
 import { getCollection } from "astro:content";
 
-import Updates from "../components/Updates.astro";
+// Icons
+import Heart from "../components/Heart.astro";
+import Bolt from "../components/Bolt.astro";
+import Twitter from "../components/Twitter.astro";
+
 import Layout from "../layouts/Layout.astro";
 
-const allPosts = await Astro.glob("../content/updates/*.md");
+interface Update {
+    title: string;
+    Content: Function;
+    date: number;
+    contentType: string;
+    twitter: string;
+}
 
-const posts = allPosts.map((b) => ({
-    title: b.frontmatter.title,
-    Content: b.Content,
-    date: b.frontmatter.date,
+interface Thanks {
+    twitter: string;
+    Content: Function;
+    date: number;
+    contentType: string;
+    twitter: string;
+}
+
+const allUpdates = await Astro.glob("../content/updates/*.md");
+
+const allThanks = await Astro.glob("../content/thanks/*.md");
+
+const updates = allUpdates.map((update) => ({
+    title: update.frontmatter.title,
+    Content: update.Content,
+    date: update.frontmatter.date,
+    contentType: "update",
+    twitter: update.frontmatter.twitter,
 }));
+
+const thanks = allThanks.map((thank) => ({
+    title: thank.frontmatter.title,
+    Content: thank.Content,
+    date: thank.frontmatter.date,
+    contentType: "thank",
+    twitter: thank.frontmatter.twitter,
+}));
+
+const allContent = [...thanks, ...updates];
+
+const allContentSorted = allContent.sort(
+    (a: Update | Thanks, b: Update | Thanks) => b.date - a.date
+);
 ---
 
 <Layout title="TheCoppinger">
@@ -24,12 +62,49 @@ const posts = allPosts.map((b) => ({
         </p>
     </div>
     {
-        posts.map(({ Content, date }) => {
-            return (
-                <article>
-                    <Content />
-                    <p class="text-slate-400 font-glamour">{date}</p>
-                </article>
+        allContentSorted.map(({ Content, date, contentType, twitter }) => {
+            return contentType === "thank" ? (
+                <>
+                    <article>
+                        <Heart />
+                        <Content />
+                        {twitter ? (
+                            <a
+                                target="_blank"
+                                href={`https://twitter.com/${twitter}`}
+                                class="flex gap-2 items-center"
+                            >
+                                <Twitter /> {twitter}
+                            </a>
+                        ) : (
+                            ""
+                        )}
+                        <p class="text-slate-400 font-glamour">
+                            {new Date(date).toLocaleDateString("en-US")}
+                        </p>
+                    </article>
+                </>
+            ) : (
+                <>
+                    <article>
+                        <Bolt />
+                        <Content />
+                        {twitter ? (
+                            <a
+                                target="_blank"
+                                href={twitter}
+                                class="flex gap-2 items-center"
+                            >
+                                <Twitter />
+                            </a>
+                        ) : (
+                            ""
+                        )}
+                        <p class="text-slate-400 font-glamour">
+                            {new Date(date).toLocaleDateString("en-US")}
+                        </p>
+                    </article>
+                </>
             );
         })
     }
