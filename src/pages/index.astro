@@ -11,14 +11,14 @@ import Layout from "../layouts/Layout.astro";
 interface Update {
     title: string;
     Content: Function;
-    date: number;
+    date: string;
     contentType: string;
     twitter: string;
 }
 
 interface Thanks {
     Content: Function;
-    date: number;
+    date: string;
     contentType: string;
     twitter: string;
 }
@@ -43,13 +43,49 @@ const thanks = allThanks.map((thank) => ({
     twitter: thank.frontmatter.twitter,
 }));
 
+function dateParser(dateString: string){
+    let parts = dateString.split("/")
+
+    let day = parts[0]
+    let month = parts[1]
+    let year = parseInt(parts[2], 10) + 2000
+
+    return(year + month + day)
+
+}
+
 const allContent = [...thanks, ...updates];
 
 const allContentSorted = allContent.sort(
-    (a: Update | Thanks, b: Update | Thanks) => b.date - a.date
+    (a: Update | Thanks, b: Update | Thanks) => dateParser(a.date) - dateParser(b.date)
 );
----
 
+let startDate = allContentSorted[allContentSorted.length - 1].date
+
+let uniqueDays = new Set()
+
+for (let i = allContentSorted.length - 1; i > 0; i--) {
+    uniqueDays.add(allContentSorted[i].date)
+}
+
+let dates = Array.from(uniqueDays)
+
+let dateObj = {}
+
+for (let i = 0; i < dates.length; i++) {
+    Object.assign(dateObj, {[dates[i]]: []})
+}
+
+for (let i = 0; i < allContentSorted.length; i++) {
+    for (let j = 0; j < dates.length; j++) {
+        if(allContentSorted[i].date === dates[j]){
+            dateObj[dates[j]].push(allContentSorted[i])
+        }
+    }
+}
+
+// console.log(Object.entries(dateObj));
+---
 <Layout title="TheCoppinger">
     <div class="card-dark">
         <h1>Updates</h1>
@@ -60,51 +96,48 @@ const allContentSorted = allContent.sort(
             >
         </p>
     </div>
-    {
-        allContentSorted.map(({ Content, date, contentType, twitter }) => {
-            return contentType === "thank" ? (
-                <>
-                    <article>
-                        <Heart />
-                        <Content />
-                        {twitter ? (
-                            <a
-                                target="_blank"
-                                href={`https://twitter.com/${twitter}`}
-                                class="flex gap-2 items-center"
-                            >
-                                <Twitter /> {twitter}
-                            </a>
-                        ) : (
-                            ""
-                        )}
-                        <p class="text-slate-400 font-glamour">
-                            {new Date(date).toLocaleDateString("en-US")}
-                        </p>
-                    </article>
-                </>
-            ) : (
-                <>
-                    <article>
-                        <Bolt />
-                        <Content />
-                        {twitter ? (
-                            <a
-                                target="_blank"
-                                href={twitter}
-                                class="flex gap-2 items-center"
-                            >
-                                <Twitter />
-                            </a>
-                        ) : (
-                            ""
-                        )}
-                        <p class="text-slate-400 font-glamour">
-                            {new Date(date).toLocaleDateString("en-US")}
-                        </p>
-                    </article>
-                </>
-            );
-        })
-    }
+        {
+            Object.entries(dateObj).map((dateBundle) => {
+                return (
+                    <>
+                        <h2>{dateBundle[0]}</h2> {/* Displaying dateBundle[0] */}
+                        {dateBundle[1].map(({ Content, date, contentType, twitter }) => {
+                            return contentType === "thank" ? (
+                                <article>
+                                    <Heart />
+                                    <Content />
+                                    {twitter ? (
+                                        <a
+                                            target="_blank"
+                                            href={`https://twitter.com/${twitter}`}
+                                            class="flex gap-2 items-center"
+                                        >
+                                            <Twitter /> {twitter}
+                                        </a>
+                                    ) : (
+                                        ""
+                                    )}
+                                </article>
+                            ) : (
+                                <article>
+                                    <Bolt />
+                                    <Content />
+                                    {twitter ? (
+                                        <a
+                                            target="_blank"
+                                            href={`https://twitter.com/${twitter}`}
+                                            class="flex gap-2 items-center"
+                                        >
+                                            <Twitter />
+                                        </a>
+                                    ) : (
+                                        ""
+                                    )}
+                                </article>
+                            );
+                        })}
+                    </>
+                );
+            })
+        }
 </Layout>
